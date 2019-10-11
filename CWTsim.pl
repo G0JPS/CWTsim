@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 # CWTsim
-# G0JPS [2080], Feb 2019
+# G0JPS [2080], Oct 2019
 
 # WHAT IS CWTsim?
 # The script does two things. It fetches a CWOPs member list from
@@ -40,7 +40,7 @@ my $cwt = "";
 
 print "\033[2J";
 print "\033[0;0H";
-print "CWOpCallsigns : started\n";
+print "CWTsim : started\n";
 
 #Get membership list from the web
 sub getmembers{
@@ -78,8 +78,8 @@ print "Running Station is $runner\n\n";
 sleep 1;
 
 @fields = split /,/, $runner;
-$runnercall = @fields[0];
-$runner = @fields [1] . " " . @fields [2];
+$runnercall = $fields[0];
+$runner = $fields [1] . " " . $fields [2];
 $cwt .= "CQ $runnercall CWT\n";
 
 # Display some callsigns
