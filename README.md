@@ -1,5 +1,5 @@
 CWTsim
-G0JPS [2080], Feb 2019
+G0JPS [2080], Oct 2019
 
 WHAT IS CWTsim?
 The script does two things. It fetches a CWOPs member list from
