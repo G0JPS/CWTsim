@@ -1,14 +1,15 @@
 #!/usr/bin/perl
 
-# CWOPspotter
+# CWTsim
 # G0JPS [2080], Feb 2019
 
-# WHAT IS CWOPCallsigns?
+# WHAT IS CWTsim?
 # The script does two things. It fetches a CWOPs member list from
 # the web and stores it in an array.
 #
-# Secondly it displays a selction of random entries for an advisor
-# to send to students during a zoom session for CWT practice.
+# Secondly it outputs the text of a running CWT station, either
+# to send to students during a zoom session for CWT practice, or
+# to paste into CW Player to generate an audio file for them.
 #
 # *If* I can get sound working, I hope to make it simulate a running station!
 
@@ -29,10 +30,13 @@ my $callsign = "";
 
 my %cwops;
 my %cwopsheard;
+my @fields;
 my $random;
 my $mems;
 my $ents = 0;
 my $runner;
+my $runnercall;
+my $cwt = "";
 
 print "\033[2J";
 print "\033[0;0H";
@@ -48,7 +52,7 @@ sub getmembers{
 		my $line = $1;
 		chomp $line;
 		my ($null,$exp, $call, $number, $name, $d1) = split /,/, $line;
-		$cwops{$call}=$call . " " . $name . " " . $number;
+		$cwops{$call}=$call . "," . $name . "," . $number;
 	}
 $mems = (keys %cwops);
 print "Done - $mems members downloaded.\n\n";
@@ -73,15 +77,22 @@ $runner = $callsign;
 print "Running Station is $runner\n\n";
 sleep 1;
 
+@fields = split /,/, $runner;
+$runnercall = @fields[0];
+$runner = @fields [1] . " " . @fields [2];
+$cwt .= "CQ $runnercall CWT\n";
+
 # Display some callsigns
-print "Displaying some callsigns...\n\n";
 
 while ($runs >= 0){
 	getacallsign();
-	print "$callsign\n";
+	my ($call,$name,$number) = split /,/, $callsign;
+	$cwt .= "  $call\n";
+	$cwt .= "$call $runner\n";
+	$cwt .= "  R $name $number\n";
+	$cwt .= "TU $runnercall CWT\n";
 	$runs --;
-	sleep 1;
 }	
 
-print "\n\n73!\n";
+print "$cwt \n\n73!\n";
 
